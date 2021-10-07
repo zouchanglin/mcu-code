@@ -1,0 +1,55 @@
+C51 COMPILER V9.60.0.0   ESP8266                                                           10/07/2021 09:06:31 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE ESP8266
+OBJECT MODULE PLACED IN .\Objects\ESP8266.obj
+COMPILER INVOKED BY: D:\develop\Keil_v5\C51\BIN\C51.EXE ESP8266.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Li
+                    -stings\ESP8266.lst) OBJECT(.\Objects\ESP8266.obj)
+
+line level    source
+
+   1          #include "Delay.h"
+   2          #include "UART.h"
+   3          #include "LCD1602.h"
+   4          
+   5          // 初始化ESP8266
+   6          void ESP8266_Connect_Init()
+   7          {
+   8   1          char *muxCmd="AT+CIPMUX=1\r\n";
+   9   1          char *serverCmd="AT+CIPSERVER=1,8080\r\n";
+  10   1              
+  11   1              Delay(200);
+  12   1          UART_SendString(muxCmd);
+  13   1              Delay(200);
+  14   1          UART_SendString(serverCmd);
+  15   1      }
+  16          
+  17          // 发送到客户端，客户端ID，内容，内容长度
+  18          void ESP8266_SendString(char *clientId, char *str, char *length)
+  19          {       
+  20   1              // 串口发送数据传出指令, AT+CIPSEND=0,10
+  21   1              UART_SendString("AT+CIPSEND=");
+  22   1              UART_SendString(clientId);
+  23   1              UART_SendString(",");
+  24   1              UART_SendString(length);
+  25   1              UART_SendString("\r\n");
+  26   1              Delay(100);
+  27   1              UART_SendString(str);
+  28   1              Delay(20);
+  29   1      }
+  30          
+  31          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    124    ----
+   CONSTANT SIZE    =     53    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      15
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

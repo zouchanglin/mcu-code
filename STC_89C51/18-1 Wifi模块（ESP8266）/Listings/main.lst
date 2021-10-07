@@ -1,0 +1,75 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              10/07/2021 09:06:31 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\develop\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listi
+                    -ngs\main.lst) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX51.H>
+   2          #include <INTRINS.H>
+   3          #include <STRING.H>
+   4          
+   5          #include "UART.h"
+   6          #include "LCD1602.h"
+   7          #include "Delay.h"
+   8          #include "ESP8266.h"
+   9          
+  10          unsigned char i = 0;
+  11          unsigned char flag = 0;
+  12          unsigned char receive[50] = {'\0'};
+  13          
+  14          
+  15          // 收到数据触发中断
+  16          void UART_Routine() interrupt 4
+  17          {
+  18   1          char res;
+  19   1          res=SBUF;
+  20   1          RI=0;
+  21   1          if(res=='+'||i>0)
+  22   1          {
+  23   2              receive[i]=res;
+  24   2              i++;
+  25   2              if(res=='\n')
+  26   2              {
+  27   3                              LCD_ShowNum(2,1,flag++,3);
+  28   3                              LCD_ShowString(2,4,receive);
+  29   3                              // 收到后做出响应【可选】,参数为客户端ID、内容、长度，注意都是字符串表�
+             -��形式
+  30   3                              ESP8266_SendString("0", "ABC12345678", "11");
+  31   3                  i=0;
+  32   3                  //添加对收到信息的处理代码
+  33   3                  memset(receive,0,50);
+  34   3              }
+  35   2          }
+  36   1      }
+  37          
+  38          void main()
+  39          {
+  40   1              LCD_Init();
+  41   1              UART_Init();
+  42   1              ESP8266_Connect_Init();
+  43   1              LCD_ShowString(1,1,"success");
+  44   1              while(1)
+  45   1              {
+  46   2                      
+  47   2              }
+  48   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    190    ----
+   CONSTANT SIZE    =     25    ----
+C51 COMPILER V9.60.0.0   MAIN                                                              10/07/2021 09:06:31 PAGE 2   
+
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     52    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
